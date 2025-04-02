@@ -1,33 +1,22 @@
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
+import org.example.OKFeedPage;
 import org.example.OKLoginPage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.time.Duration;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.open;
-
-public class OKLoginTest {
-
-    @BeforeEach
-    public void setUp() {
-        Configuration.browser = "chrome";
-        Configuration.timeout = 10000;
-        open("https://ok.ru");
-    }
+public class OKLoginTest extends BaseTest {
 
     @Test
+    @DisplayName("Проверка видимости всех элементов на странице логина")
     public void testPageElementsAreVisible() {
         OKLoginPage loginPage = new OKLoginPage();
 
-        loginPage.getUserNameField().shouldBe(visible);
-        loginPage.getPasswordField().shouldBe(visible);
-        loginPage.getLoginButton().shouldBe(visible);
+        assertTrue(loginPage.isUserNameFieldVisible(), "Поле ввода логина отсутствует");
+        assertTrue(loginPage.isPasswordFieldVisible(), "Поле ввода пароля отсутствует");
+        assertTrue(loginPage.isLoginButtonVisible(), "Кнопка входа отсутствует");
     }
 
     @ParameterizedTest
@@ -36,6 +25,7 @@ public class OKLoginTest {
             "'any_login', '', 'Введите пароль'",
             "'invalid_login', 'invalid_password', 'Неправильно указан логин и/или пароль'"
     })
+    @DisplayName("Тестирование логина с некорректными данными")
     public void testLoginWithDifferentInvalidScenarios(String login, String password, String expectedErrorMessage) {
         OKLoginPage loginPage = new OKLoginPage();
 
@@ -43,25 +33,18 @@ public class OKLoginTest {
         loginPage.enterPassword(password);
         loginPage.clickLoginButton();
 
-        Selenide.$x("//div[contains(@class, 'login_error') and contains(text(), '" + expectedErrorMessage + "')]")
-                .shouldBe(visible, Duration.ofSeconds(10));
+        assertTrue(loginPage.isErrorMessageDisplayed(expectedErrorMessage), "Ошибка не отобразилась или неверный текст");
     }
 
-
-    // Здесь я при тестировании указала свои реальные данные для входа в мой аккаунт
     @Test
+    @DisplayName("Тестирование успешного входа с корректными данными")
     public void testLoginWithValidCredentials() {
         OKLoginPage loginPage = new OKLoginPage();
-        loginPage.enterLogin("valid_name");
-        loginPage.enterPassword("valid_password");
+        loginPage.enterLogin("technopol66");
+        loginPage.enterPassword("technopolisPassword");
         loginPage.clickLoginButton();
 
-        Selenide.$x("//*[@id='hook_Block_Navigation']/div/div/div[1]/a/div[contains(text(), 'Ксения Нестеренко')]")
-                .shouldBe(visible, Duration.ofSeconds(10));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        Selenide.closeWebDriver();
+        OKFeedPage feedPage = new OKFeedPage();
+        assertTrue(feedPage.isUserLoggedIn(), "Пользователь не был перенаправлен на страницу профиля");
     }
 }
