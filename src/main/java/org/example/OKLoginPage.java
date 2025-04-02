@@ -33,9 +33,6 @@ public class OKLoginPage {
 
     /**
      * Проверяет, отображается ли ошибка авторизации с ожидаемым сообщением.
-     *
-     * @param expectedMessage Ожидаемое сообщение об ошибке.
-     * @return true, если ошибка отображается, иначе false.
      */
     public boolean isErrorMessageDisplayed(String expectedMessage) {
         return $x(String.format(ERROR_MESSAGE_XPATH, expectedMessage))
