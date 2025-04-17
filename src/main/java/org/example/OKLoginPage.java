@@ -1,13 +1,9 @@
 package org.example;
 
 import com.codeborne.selenide.SelenideElement;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
-/**
- * Страница авторизации на сайте Одноклассников.
- */
 public class OKLoginPage {
 
     private static final String USERNAME_FIELD_XPATH = "//*[@id='field_email']";
@@ -19,21 +15,26 @@ public class OKLoginPage {
     private final SelenideElement passwordField = $x(PASSWORD_FIELD_XPATH);
     private final SelenideElement loginButton = $x(LOGIN_BUTTON_XPATH);
 
-    public void enterLogin(String login) {
+    public OKLoginPage enterLogin(String login) {
         userNameField.shouldBe(visible.because("Поле ввода логина отсутствует")).setValue(login);
+        return this;
     }
 
-    public void enterPassword(String password) {
+    public OKLoginPage enterPassword(String password) {
         passwordField.shouldBe(visible.because("Поле ввода пароля отсутствует")).setValue(password);
+        return this;
     }
 
-    public void clickLoginButton() {
+    public OKHomePage clickLoginButton() throws AuthError {
         loginButton.shouldBe(visible.because("Кнопка 'Войти' отсутствует")).click();
+
+        if (isErrorMessageDisplayed("Неверный логин или пароль")) {
+            throw new AuthError("Неверный логин или пароль");
+        }
+
+        return new OKHomePage();
     }
 
-    /**
-     * Проверяет, отображается ли ошибка авторизации с ожидаемым сообщением.
-     */
     public boolean isErrorMessageDisplayed(String expectedMessage) {
         return $x(String.format(ERROR_MESSAGE_XPATH, expectedMessage)).is(visible);
     }

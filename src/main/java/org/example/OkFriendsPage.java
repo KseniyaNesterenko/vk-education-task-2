@@ -1,7 +1,6 @@
 package org.example;
 
 import com.codeborne.selenide.SelenideElement;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -14,10 +13,11 @@ public class OkFriendsPage {
 
     private final SelenideElement friendNameField = $x(FRIEND_NAME_FIELD_XPATH);
 
-    public void searchFriend(String friendName) {
+    public OkFriendsPage searchFriend(String friendName) {
         friendNameField.shouldBe(visible.because("Поле поиска друзей не найдено"))
                 .setValue(friendName)
                 .pressEnter();
+        return this;
     }
 
     public boolean isFriendFound(String friendName) {
