@@ -35,21 +35,18 @@ public class OKLoginPage {
      * Проверяет, отображается ли ошибка авторизации с ожидаемым сообщением.
      */
     public boolean isErrorMessageDisplayed(String expectedMessage) {
-        return $x(String.format(ERROR_MESSAGE_XPATH, expectedMessage))
-                .shouldBe(visible.because("Ошибка авторизации не отобразилась"))
-                .exists();
+        return $x(String.format(ERROR_MESSAGE_XPATH, expectedMessage)).is(visible);
     }
 
     public boolean isUserNameFieldVisible() {
-        return userNameField.shouldBe(visible.because("Поле ввода логина отсутствует")).exists();
+        return userNameField.is(visible);
     }
 
     public boolean isPasswordFieldVisible() {
-        return passwordField.shouldBe(visible.because("Поле ввода пароля отсутствует")).exists();
+        return passwordField.is(visible);
     }
 
     public boolean isLoginButtonVisible() {
-        return loginButton.shouldBe(visible.because("Кнопка 'Войти' отсутствует")).exists();
+        return loginButton.is(visible);
     }
-
 }

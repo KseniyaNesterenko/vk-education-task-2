@@ -10,8 +10,8 @@ import static com.codeborne.selenide.Selenide.$x;
  */
 public class OKHomePage {
 
-    private static final String HOBBY_BUTTON_XPATH = "//*[@class='tico null' and @role='button' and contains(text(), 'Увлечения')]";
-    private static final String FRIENDS_BUTTON_XPATH = "//*[@class='tico null' and @role='button' and contains(text(), 'Друзья')]";
+    private static final String HOBBY_BUTTON_XPATH = "//div[normalize-space(text())='Увлечения']";
+    private static final String FRIENDS_BUTTON_XPATH = "//div[normalize-space(text())='Друзья']";
 
     /**
      * Кнопки для перехода в разделы 'Увлечения' и 'Друзья'.

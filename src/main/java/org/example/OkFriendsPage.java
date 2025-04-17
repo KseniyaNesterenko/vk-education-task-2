@@ -11,21 +11,17 @@ import static com.codeborne.selenide.Selenide.$x;
 public class OkFriendsPage {
 
     private static final String FRIEND_NAME_FIELD_XPATH = "//*[contains(@placeholder, 'Искать друзей')]";
-    private static final String NO_RESULTS_XPATH = "//*[contains(@class, 'stub-empty_t')]";
 
     private final SelenideElement friendNameField = $x(FRIEND_NAME_FIELD_XPATH);
 
-    /**
-     * Ищет друга по имени.
-     */
     public void searchFriend(String friendName) {
-        friendNameField.shouldBe(visible.because("Поле поиска друзей не найдено")).setValue(friendName).pressEnter();
+        friendNameField.shouldBe(visible.because("Поле поиска друзей не найдено"))
+                .setValue(friendName)
+                .pressEnter();
     }
 
-    /**
-     * Проверяет, найден ли друг.
-     */
-    public boolean isFriendFound() {
-        return $x("//*[contains(text(), 'Дмитрий')]").shouldBe(visible.because("Друг не найден")).exists();
+    public boolean isFriendFound(String friendName) {
+        SelenideElement friendElement = $x("//*[contains(text(), '" + friendName + "')]");
+        return friendElement.shouldBe(visible.because("Друг с именем '" + friendName + "' не найден")).isDisplayed();
     }
 }

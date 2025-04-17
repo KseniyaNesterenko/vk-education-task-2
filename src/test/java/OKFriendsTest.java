@@ -35,7 +35,7 @@ public class OKFriendsTest extends BaseTest {
                         "Поиск друга: " + friendName,
                         () -> {
                             friendsPage.searchFriend(friendName);
-                            assertTrue(friendsPage.isFriendFound(), "Друг " + friendName + " не найден.");
+                            assertTrue(friendsPage.isFriendFound(friendName), "Друг " + friendName + " не найден.");
                         }
                 ))
                 .toList();

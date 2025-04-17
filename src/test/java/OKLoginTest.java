@@ -52,6 +52,6 @@ public class OKLoginTest extends BaseTest {
         loginPage.clickLoginButton();
 
         OKFeedPage feedPage = new OKFeedPage();
-        assertTrue(feedPage.isUserLoggedIn(), "Пользователь не был перенаправлен на страницу профиля");
+        assertTrue(feedPage.isUserLoggedIn("technopol66"), "Пользователь не был перенаправлен на страницу профиля");
     }
 }
