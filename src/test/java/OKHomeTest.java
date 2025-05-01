@@ -1,30 +1,29 @@
 import com.codeborne.selenide.WebDriverRunner;
-import org.example.AuthError;
-import org.example.OKHomePage;
-import org.example.OKLoginPage;
-import org.example.PageFactory;
+import org.example.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.urlContains;
 
 public class OKHomeTest extends BaseTest {
 
-    private final String login = "technopol66";
-    private final String password = "technopolisPassword";
+    @BeforeAll
+    public static void setupLoginData() {
+        TestDataRegistry.put("login", "technopol66");
+        TestDataRegistry.put("password", "technopolisPassword");
+    }
 
     @BeforeEach
     public void login() throws AuthError {
-        OKLoginPage loginPage = PageFactory.createLoginPage();
-        loginPage.enterLogin(login);
-        loginPage.enterPassword(password);
-        loginPage.clickLoginButton();
+        String login = TestDataRegistry.get("login");
+        String password = TestDataRegistry.get("password");
+
+        OKLoginPage loginPage = (OKLoginPage) PageFactory.createInitialPage(false, "login");
+        loginPage
+                .enterLogin(login)
+                .enterPassword(password)
+                .clickLoginButton();
     }
 
     @ParameterizedTest
@@ -34,18 +33,12 @@ public class OKHomeTest extends BaseTest {
     })
     @DisplayName("Тест перехода к разделам 'Увлечения' и 'Друзья'")
     public void testNavigation(String button, String expectedUrlSuffix) {
-        OKHomePage homePage = PageFactory.createHomePage();
+        OKHomePage homePage = (OKHomePage) PageFactory.createInitialPage(true, "home");
 
-        if (button.equals("hobby")) {
-            homePage.clickHobbyButton();
-        } else if (button.equals("friends")) {
-            homePage.clickFriendsButton();
-        }
+        homePage.clickButton(button);
+        WaitDecorator wait = new WaitDecorator(WebDriverRunner.getWebDriver());
+        wait.until(urlContains(expectedUrlSuffix));
 
-        WebDriverWait wait = new WebDriverWait(WebDriverRunner.getWebDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains(expectedUrlSuffix));
-
-        assertTrue(WebDriverRunner.url().endsWith(expectedUrlSuffix),
-                "Ошибочный url");
+        assertTrue(WebDriverRunner.url().endsWith(expectedUrlSuffix), "Ошибочный url");
     }
 }

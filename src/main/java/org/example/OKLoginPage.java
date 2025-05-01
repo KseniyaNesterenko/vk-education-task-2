@@ -4,16 +4,14 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class OKLoginPage {
+public class OKLoginPage extends BasePage {
+    private static final SelenideElement userNameField = $x("//*[@id='field_email']");
+    private static final SelenideElement passwordField = $x("//*[@id='field_password']");
+    private static final SelenideElement loginButton = $x("//*[@" +
+            "value='Войти в Одноклассники']");
 
-    private static final String USERNAME_FIELD_XPATH = "//*[@id='field_email']";
-    private static final String PASSWORD_FIELD_XPATH = "//*[@id='field_password']";
-    private static final String LOGIN_BUTTON_XPATH = "//input[@value='Войти в Одноклассники']";
-    private static final String ERROR_MESSAGE_XPATH = "//div[contains(@class, 'login_error') and contains(text(), '%s')]";
-
-    private final SelenideElement userNameField = $x(USERNAME_FIELD_XPATH);
-    private final SelenideElement passwordField = $x(PASSWORD_FIELD_XPATH);
-    private final SelenideElement loginButton = $x(LOGIN_BUTTON_XPATH);
+    protected static final String ERROR_MESSAGE =
+            "//*[(contains(@class, 'login_error') and contains(text(), '%s'))]";
 
     public OKLoginPage enterLogin(String login) {
         userNameField.shouldBe(visible.because("Поле ввода логина отсутствует")).setValue(login);
@@ -36,7 +34,7 @@ public class OKLoginPage {
     }
 
     public boolean isErrorMessageDisplayed(String expectedMessage) {
-        return $x(String.format(ERROR_MESSAGE_XPATH, expectedMessage)).is(visible);
+        return $x(String.format(ERROR_MESSAGE, expectedMessage)).is(visible);
     }
 
     public boolean isUserNameFieldVisible() {

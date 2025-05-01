@@ -2,19 +2,16 @@ package org.example;
 
 public class PageFactory {
 
-    public static OKLoginPage createLoginPage() {
-        return new OKLoginPage();
-    }
+    public static BasePage createInitialPage(boolean isLoggedIn, String destination) {
+        if (!isLoggedIn) {
+            return new OKLoginPage();
+        }
 
-    public static OKHomePage createHomePage() {
-        return new OKHomePage();
-    }
-
-    public static OKFeedPage createFeedPage() {
-        return new OKFeedPage();
-    }
-
-    public static OkFriendsPage createFriendsPage() {
-        return new OkFriendsPage();
+        return switch (destination.toLowerCase()) {
+            case "home" -> new OKHomePage();
+            case "feed" -> new OKFeedPage();
+            case "friends" -> new OkFriendsPage();
+            default -> throw new IllegalArgumentException("Unknown page type: " + destination);
+        };
     }
 }
