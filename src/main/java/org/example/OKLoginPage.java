@@ -14,23 +14,17 @@ public class OKLoginPage extends BasePage {
             "//*[(contains(@class, 'login_error') and contains(text(), '%s'))]";
 
     public OKLoginPage enterLogin(String login) {
-        userNameField.shouldBe(visible.because("Поле ввода логина отсутствует")).setValue(login);
+        userNameField.setValue(login);
         return this;
     }
 
     public OKLoginPage enterPassword(String password) {
-        passwordField.shouldBe(visible.because("Поле ввода пароля отсутствует")).setValue(password);
+        passwordField.setValue(password);
         return this;
     }
 
-    public OKHomePage clickLoginButton() throws AuthError {
-        loginButton.shouldBe(visible.because("Кнопка 'Войти' отсутствует")).click();
-
-        if (isErrorMessageDisplayed("Неверный логин или пароль")) {
-            throw new AuthError("Неверный логин или пароль");
-        }
-
-        return new OKHomePage();
+    public void clickLoginButton() {
+        loginButton.click();
     }
 
     public boolean isErrorMessageDisplayed(String expectedMessage) {
@@ -47,5 +41,10 @@ public class OKLoginPage extends BasePage {
 
     public boolean isLoginButtonVisible() {
         return loginButton.is(visible);
+    }
+
+    @Override
+    protected void checkPage() {
+        shouldBeVisible(userNameField, passwordField, loginButton);
     }
 }

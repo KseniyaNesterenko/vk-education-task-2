@@ -5,21 +5,16 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.CollectionCondition;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
+import com.codeborne.selenide.Condition;
 
 public class OkFriendsPage extends BasePage {
+    public static final String[] FRIEND_NAMES = {"Дмитрий Иванов", "Алексей Иванов", "Мария Иванова"};
 
-    private static final SelenideElement friendNameField =
+    private static final SelenideElement FRIEND_NAME_FIELD =
             $x("//*[contains(@placeholder, 'Искать друзей')]");
 
     public OkFriendsPage searchFriend(String friendName) {
-        new LoadableComponent() {
-            @Override
-            protected SelenideElement getElementToCheck() {
-                return friendNameField;
-            }
-        }.waitUntilLoaded();
-
-        friendNameField.setValue(friendName).pressEnter();
+        FRIEND_NAME_FIELD.setValue(friendName).pressEnter();
         return this;
     }
 
@@ -33,5 +28,10 @@ public class OkFriendsPage extends BasePage {
         return results.stream().anyMatch(result ->
                 result.getText().replaceAll("\\s+", " ").trim().equalsIgnoreCase(normalizedName)
         );
+    }
+
+    @Override
+    protected void checkPage() {
+        FRIEND_NAME_FIELD.shouldBe(Condition.visible);
     }
 }

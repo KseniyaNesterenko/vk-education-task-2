@@ -8,12 +8,6 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.urlContains;
 
 public class OKHomeTest extends BaseTest {
 
-    @BeforeAll
-    public static void setupLoginData() {
-        TestDataRegistry.put("login", "technopol66");
-        TestDataRegistry.put("password", "technopolisPassword");
-    }
-
     @BeforeEach
     public void login() throws AuthError {
         String login = TestDataRegistry.get("login");
@@ -36,8 +30,9 @@ public class OKHomeTest extends BaseTest {
         OKHomePage homePage = (OKHomePage) PageFactory.createInitialPage(true, "home");
 
         homePage.clickButton(button);
-        WaitDecorator wait = new WaitDecorator(WebDriverRunner.getWebDriver());
-        wait.until(urlContains(expectedUrlSuffix));
+
+        WaitDecorator wait = new WaitDecorator();
+        wait.until(driver -> WebDriverRunner.url().contains(expectedUrlSuffix));
 
         assertTrue(WebDriverRunner.url().endsWith(expectedUrlSuffix), "Ошибочный url");
     }

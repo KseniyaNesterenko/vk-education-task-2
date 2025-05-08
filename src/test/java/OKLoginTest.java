@@ -42,11 +42,8 @@ public class OKLoginTest extends BaseTest {
     @DisplayName("Тестирование успешного входа с корректными данными")
     @Tag("login")
     public void testLoginWithValidCredentials() throws AuthError {
-        TestDataRegistry.put("validUsername", "technopol66");
-        TestDataRegistry.put("validPassword", "technopolisPassword");
-
-        String username = TestDataRegistry.get("validUsername");
-        String password = TestDataRegistry.get("validPassword");
+        String username = TestDataRegistry.get("login");
+        String password = TestDataRegistry.get("password");
 
         OKLoginPage loginPage = (OKLoginPage) PageFactory.createInitialPage(false, "login");
         loginPage.enterLogin(username)
@@ -54,6 +51,6 @@ public class OKLoginTest extends BaseTest {
                 .clickLoginButton();
 
         OKFeedPage feedPage = (OKFeedPage) PageFactory.createInitialPage(true, "feed");
-        assertTrue(feedPage.isUserLoggedIn("technopol66"), "Пользователь не был перенаправлен на страницу профиля");
+        assertTrue(feedPage.isUserLoggedIn(username), "Пользователь не был перенаправлен на страницу профиля");
     }
 }

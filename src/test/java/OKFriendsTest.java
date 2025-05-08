@@ -31,9 +31,8 @@ public class OKFriendsTest extends BaseTest {
         homePage.clickButton("friends");
 
         OkFriendsPage friendsPage = (OkFriendsPage) PageFactory.createInitialPage(true, "friends");
-        String[] friendNames = {"Дмитрий Иванов", "Алексей Иванов", "Мария Иванова"};
 
-        return Arrays.stream(friendNames)
+        return Arrays.stream(OkFriendsPage.FRIEND_NAMES)
                 .map(friendName -> DynamicTest.dynamicTest(
                         "Поиск друга: " + friendName,
                         () -> {
